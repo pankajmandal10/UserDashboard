@@ -4,6 +4,7 @@ import {
   getUserProfileMethod,
   loginApi,
   register,
+  updateProfileApi,
 } from '../services/userApi';
 
 const initialState = {
@@ -62,6 +63,18 @@ const authSlice = createSlice({
     setUserProfile(state, action) {
       state.userProfile = action.payload;
     },
+    updateProfileStart(state) {
+      state.isLoading = true;
+      state.error = null;
+    },
+    updateProfileSuccess(state, action) {
+      state.isLoading = false;
+      // You can handle the success response as needed
+    },
+    updateProfileFailure(state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -76,6 +89,9 @@ export const {
   confirmPasswordFailure,
   confirmPasswordStart,
   confirmPasswordSuccess,
+  updateProfileFailure,
+  updateProfileStart,
+  updateProfileSuccess,
 } = authSlice.actions;
 export const loginUser = credentials => async dispatch => {
   try {
@@ -132,6 +148,20 @@ export const getUserProfiles = (token, userId) => async dispatch => {
     dispatch(
       getUserProfileFailure(error.message || 'Failed to fetch user profile'),
     );
+  }
+};
+
+export const updateProfile = (token, profileData) => async dispatch => {
+  console.warn('profileData', profileData);
+  try {
+    dispatch(updateProfileStart());
+
+    const updatedData = await updateProfileApi(token, profileData);
+    console.warn('f res', updatedData);
+    dispatch(updateProfileSuccess(updatedData));
+  } catch (error) {
+    console.warn(error);
+    dispatch(updateProfileFailure(error.message || 'Failed to update profile'));
   }
 };
 

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import React, {useState} from 'react';
 import {PRIMARY_COLOR} from '../constents/Colors';
@@ -18,98 +19,101 @@ const AliasScreen = ({navigation}) => {
   const [displayName, setDisplayName] = useState('iron man');
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: '600',
-          color: '#2C3135',
-          textAlign: 'center',
-          paddingBottom: 60,
-        }}>
-        Real ID
-      </Text>
-
-      <View
-        style={{
-          backgroundColor: '#F4F4F4',
-          alignItems: 'center',
-          justifyContent: 'center',
-          alignSelf: 'center',
-          margin: 10,
-          borderRadius: 50,
-          width: 90,
-          height: 90,
-        }}>
-        <Image
-          source={require('../assets/user-circle.png')}
-          style={styles.logo}
-        />
-      </View>
-
-      <View style={{width: '80%'}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          Alias
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="at-outline" size={20} color="#2C3135" />
-          <TextInput
-            placeholder="alias"
-            value={alias}
-            onChangeText={text => setAlias(text)}
-          />
-        </View>
-      </View>
-      <View style={{width: '80%', marginVertical: 12}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          Display Name
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="person-outline" size={20} color="#2C3135" />
-          <TextInput
-            placeholder="Display Name"
-            value={displayName}
-            onChangeText={text => setDisplayName(text)}
-          />
-        </View>
-      </View>
-
-      <View
-        style={{
-          width: '85%',
-          flex: 1,
-          justifyContent: 'flex-end',
-        }}>
-        <TouchableOpacity style={styles.button} onPress={{}}>
-          <Text style={styles.buttonText}>
-            Save and Continue{'   '}
-            <Image source={require('../assets/suffix-icon.png')} />
-          </Text>
-        </TouchableOpacity>
+    <>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <View style={styles.container}>
         <Text
           style={{
-            fontSize: 16,
-            color: '#E7651C',
+            fontSize: 24,
+            fontWeight: '600',
+            color: '#2C3135',
             textAlign: 'center',
-            marginVertical: 10,
+            paddingBottom: 60,
           }}>
-          Skip Alias creation for now
+          Real ID
         </Text>
+
         <View
           style={{
-            backgroundColor: PRIMARY_COLOR,
+            backgroundColor: '#F4F4F4',
             alignItems: 'center',
             justifyContent: 'center',
             alignSelf: 'center',
             margin: 10,
             borderRadius: 50,
-            width: 60,
-            height: 60,
+            width: 90,
+            height: 90,
           }}>
-          <Image source={require('../assets/Logo.png')} style={styles.logo} />
+          <Image
+            source={require('../assets/user-circle.png')}
+            style={styles.logo}
+          />
+        </View>
+
+        <View style={{width: '80%'}}>
+          <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
+            Alias
+          </Text>
+          <View style={styles.boxContainer}>
+            <Ionicons name="at-outline" size={20} color="#2C3135" />
+            <TextInput
+              placeholder="alias"
+              value={alias}
+              onChangeText={text => setAlias(text)}
+            />
+          </View>
+        </View>
+        <View style={{width: '80%', marginVertical: 12}}>
+          <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
+            Display Name
+          </Text>
+          <View style={styles.boxContainer}>
+            <Ionicons name="person-outline" size={20} color="#2C3135" />
+            <TextInput
+              placeholder="Display Name"
+              value={displayName}
+              onChangeText={text => setDisplayName(text)}
+            />
+          </View>
+        </View>
+
+        <View
+          style={{
+            width: '85%',
+            flex: 1,
+            justifyContent: 'flex-end',
+          }}>
+          <TouchableOpacity style={styles.button} onPress={{}}>
+            <Text style={styles.buttonText}>
+              Save and Continue{'   '}
+              <Image source={require('../assets/suffix-icon.png')} />
+            </Text>
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 16,
+              color: '#E7651C',
+              textAlign: 'center',
+              marginVertical: 10,
+            }}>
+            Skip Alias creation for now
+          </Text>
+          <View
+            style={{
+              backgroundColor: PRIMARY_COLOR,
+              alignItems: 'center',
+              justifyContent: 'center',
+              alignSelf: 'center',
+              margin: 10,
+              borderRadius: 50,
+              width: 60,
+              height: 60,
+            }}>
+            <Image source={require('../assets/Logo.png')} style={styles.logo} />
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 

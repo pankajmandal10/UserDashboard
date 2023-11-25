@@ -7,12 +7,18 @@ import {
   Image,
   StyleSheet,
   Alert,
+  Dimensions,
+  StatusBar,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {PRIMARY_COLOR} from '../constents/Colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {loginUser, registerUser, resigterUser} from '../reducers/authReducer';
+import {ScrollView} from 'react-native-gesture-handler';
+
+const {width, height} = Dimensions.get('window');
 
 const CreateAccountScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -20,6 +26,8 @@ const CreateAccountScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleCreateAccount = async () => {
     // Validate the input fields
@@ -50,79 +58,106 @@ const CreateAccountScreen = ({navigation}) => {
     navigation.navigate('Login');
   };
 
-  return (
-    <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: PRIMARY_COLOR,
-          width: 90,
-          height: 90,
-          justifyContent: 'center',
-          borderRadius: 50,
-          marginBottom: 60,
-        }}>
-        <Image source={require('../assets/Logo.png')} style={styles.logo} />
-      </View>
-      <View style={{width: '80%'}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          E-mail
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="person-outline" size={20} color="black" />
-          <TextInput
-            placeholder="Enter your e-mail"
-            value={email}
-            onChangeText={text => setEmail(text)}
-          />
-        </View>
-      </View>
-      <View style={{width: '80%', marginVertical: 12}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          Password
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="lock-closed-outline" size={20} color="black" />
-          <TextInput
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={text => setPassword(text)}
-          />
-        </View>
-      </View>
-      <View style={{width: '80%', marginVertical: 12}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          Confirm Password
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="lock-closed-outline" size={20} color="black" />
-          <TextInput
-            placeholder="Confirm Password"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={text => setConfirmPassword(text)}
-          />
-        </View>
-      </View>
-      <View style={{marginVertical: 90, width: '80%'}}>
-        <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
-          <Text style={styles.buttonText}>
-            Next{'   '}
-            <Image source={require('../assets/suffix-icon.png')} />
-          </Text>
-        </TouchableOpacity>
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
-        <TouchableOpacity
-          style={styles.createAccButton}
-          onPress={() => {
-            // handleCreateAccount;
-          }}>
-          <Text style={{...styles.buttonText, color: PRIMARY_COLOR}}>
-            Cancel account creation
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+  return (
+    <>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../assets/Logo.png')} style={styles.logo} />
+          </View>
+          <View style={{width: '80%'}}>
+            <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
+              E-mail
+            </Text>
+            <View style={styles.boxContainer}>
+              <Ionicons name="person-outline" size={20} color="black" />
+              <TextInput
+                placeholder="Enter your e-mail"
+                value={email}
+                style={{width: '100%'}}
+                onChangeText={text => setEmail(text)}
+              />
+            </View>
+          </View>
+          <View style={{width: '80%', marginVertical: 12}}>
+            <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
+              Password
+            </Text>
+            <View style={styles.boxContainer}>
+              <Ionicons name="lock-closed-outline" size={20} color="black" />
+              <TextInput
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                value={password}
+                style={{width: '85%'}}
+                onChangeText={text => setPassword(text)}
+              />
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={styles.toggleButtonStyles}>
+                <Icon
+                  name={showPassword ? 'eye' : 'eye-slash'}
+                  size={20}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{width: '80%', marginVertical: 12}}>
+            <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
+              Confirm Password
+            </Text>
+            <View style={styles.boxContainer}>
+              <Ionicons name="lock-closed-outline" size={20} color="black" />
+              <TextInput
+                placeholder="Confirm Password"
+                secureTextEntry={!showConfirmPassword}
+                value={confirmPassword}
+                style={{width: '85%'}}
+                onChangeText={text => setConfirmPassword(text)}
+              />
+              <TouchableOpacity
+                onPress={toggleConfirmPasswordVisibility}
+                style={styles.toggleButtonStyles}>
+                <Icon
+                  name={showConfirmPassword ? 'eye' : 'eye-slash'}
+                  size={20}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginVertical: height * 0.1, width: '80%'}}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleCreateAccount}>
+              <Text style={styles.buttonText}>
+                Next{'   '}
+                <Image source={require('../assets/suffix-icon.png')} />
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.createAccButton}
+              onPress={() => {
+                navigation.goBack(null);
+              }}>
+              <Text style={{...styles.buttonText, color: PRIMARY_COLOR}}>
+                Cancel account creation
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 
@@ -156,7 +191,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: PRIMARY_COLOR,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: height * 0.1,
   },
   createAccButton: {
     borderColor: PRIMARY_COLOR,
@@ -171,11 +206,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
+  logoContainer: {
+    marginTop: height * 0.05,
+    marginBottom: height * 0.05,
+    backgroundColor: PRIMARY_COLOR,
+    padding: 20,
+    borderRadius: 50,
+  },
   logo: {
-    width: 35,
-    height: 35,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
-    alignSelf: 'center',
   },
 });
 

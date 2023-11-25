@@ -7,14 +7,19 @@ import {
   Image,
   StyleSheet,
   Alert,
+  Dimensions,
+  StatusBar,
 } from 'react-native';
 import LanguagePicker from '../components/LanguagePicker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {PRIMARY_COLOR} from '../constents/Colors';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {loginUser} from '../reducers/authReducer';
+import {PRIMARY_COLOR} from '../constents/Colors';
+import {ScrollView} from 'react-native-gesture-handler';
+
+const {width, height} = Dimensions.get('window');
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -36,14 +41,15 @@ const LoginScreen = ({navigation}) => {
       type: 'desktop',
       password: password,
       device_id: '123',
-      language: 'Hindi',
+      language: language.name,
     };
     try {
       await dispatch(loginUser(credentials));
       Alert.alert('Alert', 'Login successful.');
       navigation.navigate('SetUpYourProfile');
       setEmail('');
-      setEmail('');
+      setPassword('');
+      setLanguage('Hindi');
     } catch (error) {
       console.error('Login error', error);
       // Show an alert for a failed login attempt
@@ -62,84 +68,67 @@ const LoginScreen = ({navigation}) => {
     setShowPassword(!showPassword);
   };
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: PRIMARY_COLOR,
-          width: 90,
-          height: 90,
-          justifyContent: 'center',
-          borderRadius: 50,
-          marginBottom: 60,
-        }}>
-        <Image source={require('../assets/Logo.png')} style={styles.logo} />
-      </View>
-      <View style={{width: '80%'}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          E-mail
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="person-outline" size={20} color="black" />
-          <TextInput
-            placeholder="Enter your e-mail"
-            value={email}
-            onChangeText={text => setEmail(text)}
-          />
+    <>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image source={require('../assets/Logo.png')} style={styles.logo} />
         </View>
-      </View>
-      <View style={{width: '80%', marginVertical: 12}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          Password
-        </Text>
-        <View style={styles.boxContainer}>
-          <Ionicons name="lock-closed-outline" size={20} color="black" />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '90%',
-            }}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>E-mail</Text>
+          <View style={styles.boxContainer}>
+            <Ionicons name="person-outline" size={20} color="black" />
             <TextInput
-              placeholder="Password"
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={text => setPassword(text)}
+              style={styles.input}
+              placeholder="Enter your e-mail"
+              value={email}
+              onChangeText={text => setEmail(text)}
             />
-            <TouchableOpacity
-              onPress={togglePasswordVisibility}
-              style={styles.toggleButtonStyles}>
-              <Icon
-                name={showPassword ? 'eye' : 'eye-slash'}
-                size={20}
-                color="gray"
-              />
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-      <View style={{width: '80%', marginVertical: 12}}>
-        <Text style={{paddingBottom: 7, fontSize: 16, fontWeight: 'bold'}}>
-          Language
-        </Text>
-        <View style={styles.boxContainer}>
-          <Fontisto name="world-o" size={20} color="black" />
-          <LanguagePicker value={language} onChange={handleLanguageChange} />
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Password</Text>
+          <View style={styles.boxContainer}>
+            <Ionicons name="lock-closed-outline" size={20} color="black" />
+            <View style={styles.passwordInputContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={text => setPassword(text)}
+              />
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={styles.toggleButtonStyles}>
+                <Icon
+                  name={showPassword ? 'eye' : 'eye-slash'}
+                  size={20}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Language</Text>
+          <View style={styles.boxContainer}>
+            <Fontisto name="world-o" size={20} color="black" />
+            <LanguagePicker value={language} onChange={handleLanguageChange} />
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+            <Text style={{...styles.buttonText, color: '#fff'}}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.createAccButton}
+            onPress={() => navigation.navigate('NewAccount')}>
+            <Text style={styles.buttonText}>Create New Account</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={{marginVertical: 90, width: '80%'}}>
-        <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.createAccButton}
-          onPress={() => navigation.navigate('NewAccount')}>
-          <Text style={{...styles.buttonText, color: PRIMARY_COLOR}}>
-            Create New Account
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </>
   );
 };
 
@@ -150,9 +139,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
+  logoContainer: {
+    marginTop: height * 0.1,
+    marginBottom: height * 0.05,
+    backgroundColor: PRIMARY_COLOR,
+    padding: 20,
+    borderRadius: 50,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  inputContainer: {
+    width: '80%',
+    marginBottom: height * 0.02,
+  },
+  label: {
+    paddingBottom: 7,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   boxContainer: {
     flexDirection: 'row',
@@ -162,41 +168,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   input: {
-    width: '80%',
-    height: 40,
-    // borderColor: 'gray',
-    // borderWidth: 1,
-    backgroundColor: 'gray',
-    marginBottom: 10,
-    padding: 10,
+    flex: 1,
+    marginLeft: 10,
   },
-  button: {
-    backgroundColor: PRIMARY_COLOR,
-    borderRadius: 5,
-    marginTop: 20,
+  passwordInputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%',
   },
-  createAccButton: {
-    borderColor: PRIMARY_COLOR,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-    padding: 12,
-    fontSize: 15,
+  passwordInput: {
+    flex: 1,
   },
   toggleButtonStyles: {
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logo: {
-    width: 35,
-    height: 35,
-    resizeMode: 'contain',
-    alignSelf: 'center',
+  buttonContainer: {
+    width: '80%',
+    paddingTop: '30%',
+  },
+  button: {
+    backgroundColor: PRIMARY_COLOR,
+    borderRadius: 5,
+    marginTop: height * 0.02,
+  },
+  createAccButton: {
+    borderColor: PRIMARY_COLOR,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: height * 0.02,
+  },
+  buttonText: {
+    color: PRIMARY_COLOR,
+    textAlign: 'center',
+    padding: 12,
+    fontSize: 16,
   },
 });
 

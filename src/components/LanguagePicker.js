@@ -19,7 +19,7 @@ const CountryLanguagePicker = ({value, onChange}) => {
     const fetchCountriesAndLanguages = async () => {
       try {
         const response = await userApi.getCountry();
-        const countriesAndLanguages = response.data.info[75].languages; // Adjust this based on the actual API response
+        const countriesAndLanguages = response.data.info; // Adjust this based on the actual API response
         console.warn('lang data', countriesAndLanguages);
         setData(countriesAndLanguages);
       } catch (error) {

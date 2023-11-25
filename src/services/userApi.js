@@ -40,7 +40,7 @@ const confirmPassword = async passwordData => {
 
 const getUserProfileMethod = async (token, userId) => {
   try {
-    const response = await api.get(
+    const response = await userApi.get(
       `/api/users/get_user_profile?user_id=${userId}`,
       {
         headers: {
@@ -55,4 +55,28 @@ const getUserProfileMethod = async (token, userId) => {
   }
 };
 
-export {loginApi, register, confirmPassword, getUserProfileMethod};
+const updateProfileApi = async (token, profileData) => {
+  try {
+    const response = await userApi.post(
+      '/api/users/update_profile',
+      profileData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  loginApi,
+  register,
+  confirmPassword,
+  getUserProfileMethod,
+  updateProfileApi,
+};
